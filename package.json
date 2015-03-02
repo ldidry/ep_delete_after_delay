@@ -1,0 +1,20 @@
+
+{
+    "name": "ep_delete_after_delay",
+    "version": "0.0.1",
+    "description": "Automatically deletes pads after a configured delay",
+    "author": {
+        "name": "Luc Didry",
+        "email": "luc@didry.org",
+        "url": "https://fiat-tux.fr"
+    },
+    "dependencies": {
+    },
+    "peerDependencies":{
+    },
+    "repository" : {
+        "type" : "git",
+        "url" : "https://git.framasoft.org/luc/ep_delete_after_delay.git"
+    }
+}
+

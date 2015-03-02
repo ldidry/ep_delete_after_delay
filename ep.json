@@ -1,0 +1,14 @@
+{
+    "parts": [
+        {
+            "name": "ep_delete_after_delay",
+            "hooks": {
+                "handleMessage" : "ep_delete_after_delay/delete",
+                "eejsBlock_scripts": "ep_delete_after_delay/delete"
+            },
+            "client_hooks": {
+                "handleClientMessage_CUSTOM":"ep_delete_after_delay/static/js/reconnect"
+            }
+        }
+    ]
+}

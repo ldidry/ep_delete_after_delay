@@ -35,46 +35,48 @@ exports.handleMessage = function(hook_name, context, cb) {
             if (pad.getHeadRevisionNumber() !== 0) {
 
                 pad.getLastEdit(function(callback, timestamp) {
-                    var currentTime = (new Date).getTime();
+                    if (timestamp !== undefined && timestamp !== null) {
+                        var currentTime = (new Date).getTime();
 
-                    // Are we over delay?
-                    if ((currentTime - timestamp) > (delay * 1000)) {
+                        // Are we over delay?
+                        if ((currentTime - timestamp) > (delay * 1000)) {
 
-                        // Remove pad
-                        padManager.removePad(padId);
-                        console.info('Pad '+padId+' deleted since expired (delay: '+delay+' seconds).');
+                            // Remove pad
+                            padManager.removePad(padId);
+                            console.info('Pad '+padId+' deleted since expired (delay: '+delay+' seconds, last edition: '+timestamp+').');
 
-                        // Create new pad with an explanation
-                        padManager.getPad(padId, replaceText, function() {
-                            if (type === 'COLLABROOM') {
-                                // Create disconnect message
-                                var msg = {
-                                    type: "COLLABROOM",
-                                    data: { 
-                                        type: "CUSTOM",
-                                        payload: {
-                                            authorId: message.authorId,
-                                            action: "requestRECONNECT",
-                                            padId: padId
+                            // Create new pad with an explanation
+                            padManager.getPad(padId, replaceText, function() {
+                                if (type === 'COLLABROOM') {
+                                    // Create disconnect message
+                                    var msg = {
+                                        type: "COLLABROOM",
+                                        data: {
+                                            type: "CUSTOM",
+                                            payload: {
+                                                authorId: message.authorId,
+                                                action: "requestRECONNECT",
+                                                padId: padId
+                                            }
                                         }
-                                    }
-                                };
-                                // Send disconnect message to all clients
-                                var sessions = padMessageHandler.sessioninfos;
-                                Object.keys(sessions).forEach(function(key){
-                                    var session = sessions[key];
-                                    padMessageHandler.handleCustomObjectMessage(msg, false, function(){
-                                        // TODO: Error handling
-                                    }); // Send a message to this session
-                                });
-                                cb(null);
-                            } else {
-                                cb();
-                            }
-                        });
-                    } else {
-                        console.info('Nothing to do with '+padId+' (not expired)');
-                        cb();
+                                    };
+                                    // Send disconnect message to all clients
+                                    var sessions = padMessageHandler.sessioninfos;
+                                    Object.keys(sessions).forEach(function(key){
+                                        var session = sessions[key];
+                                        padMessageHandler.handleCustomObjectMessage(msg, false, function(){
+                                            // TODO: Error handling
+                                        }); // Send a message to this session
+                                    });
+                                    cb(null);
+                                } else {
+                                    cb();
+                                }
+                            });
+                        } else {
+                            console.info('Nothing to do with '+padId+' (not expired)');
+                            cb();
+                        }
                     }
                 });
             } else {
@@ -87,6 +89,6 @@ exports.handleMessage = function(hook_name, context, cb) {
     }
 };
 
-// Send 
+// Send
 function sendToTarget(message, msg){
 }

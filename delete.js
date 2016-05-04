@@ -19,7 +19,7 @@ var areParamsOk = (settings.ep_delete_after_delay) ? true : false,
 if (areParamsOk) {
     delay         = settings.ep_delete_after_delay.delay;
     loopDelay     = settings.ep_delete_after_delay.loopDelay || 3600;
-    deleteAtStart = settings.ep_delete_after_delay.deleteAtStart || true;
+    deleteAtStart = (settings.ep_delete_after_delay.deleteAtStart !== undefined) ? settings.ep_delete_after_delay.deleteAtStart : true;
     replaceText   = settings.ep_delete_after_delay.text || "The content of this pad has been deleted since it was older than the configured delay.";
     areParamsOk   = (typeof delay === 'number' && delay > 0) ? true : false;
     if (areParamsOk === false) {

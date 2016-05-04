@@ -14,10 +14,10 @@
     },
     "repository" : {
         "type" : "git",
-        "url" : "https://git.framasoft.org/luc/ep_delete_after_delay.git"
+        "url" : "https://framagit.org/luc/ep_delete_after_delay.git"
     },
     "bugs": {
-        "url" : "https://git.framasoft.org/luc/ep_delete_after_delay/issues"
+        "url" : "https://framagit.org/luc/ep_delete_after_delay/issues"
     },
     "license": "Apache-2.0"
 }

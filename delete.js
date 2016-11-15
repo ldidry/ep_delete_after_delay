@@ -18,6 +18,7 @@ var areParamsOk = (settings.ep_delete_after_delay) ? true : false,
     delay, replaceText, loopDelay, deleteAtStart;
 if (areParamsOk) {
     delay         = settings.ep_delete_after_delay.delay;
+    loop          = (settings.ep_delete_after_delay.loop !== undefined) ? settings.ep_delete_after_delay.loop : true;
     loopDelay     = settings.ep_delete_after_delay.loopDelay || 3600;
     deleteAtStart = (settings.ep_delete_after_delay.deleteAtStart !== undefined) ? settings.ep_delete_after_delay.deleteAtStart : true;
     replaceText   = settings.ep_delete_after_delay.text || "The content of this pad has been deleted since it was older than the configured delay.";
@@ -48,7 +49,9 @@ if (deleteAtStart) {
 }
 
 // start the recurring deletion loop
-waitForIt();
+if (loop) {
+    waitForIt();
+}
 
 // deletion loop
 function delete_old_pads() {

@@ -1,10 +1,28 @@
-var eejs              = require('ep_etherpad-lite/node/eejs/'),
-    API               = require('ep_etherpad-lite/node/db/API'),
-    padManager        = require('ep_etherpad-lite/node/db/PadManager'),
-    padMessageHandler = require('ep_etherpad-lite/node/handler/PadMessageHandler'),
-    settings          = require('ep_etherpad-lite/node/utils/Settings'),
-    async             = require('ep_etherpad-lite/node_modules/async'),
-    fs                = require('fs');
+var API             = require('ep_etherpad-lite/node/db/API'),
+  padManager        = require('ep_etherpad-lite/node/db/PadManager'),
+  padMessageHandler = require('ep_etherpad-lite/node/handler/PadMessageHandler'),
+  settings          = require('ep_etherpad-lite/node/utils/Settings'),
+  async             = require('ep_etherpad-lite/node_modules/async'),
+  fs                = require('fs');
+
+var epVersion = parseFloat(require('ep_etherpad-lite/package.json').version);
+var usePromises = epVersion >= 1.8
+var getHTML, getPad, listAllPads
+
+var removePad = padManager.removePad
+
+if (usePromises) {
+  getHTML = callbackify2(API.getHTML)
+
+  getPad = callbackify2(padManager.getPad)
+  listAllPads = callbackify0(padManager.listAllPads)
+} else {
+  getHTML = API.getHTML
+
+  getPad = padManager.getPad
+  listAllPads = padManager.listAllPads
+}
+
 
 fs.mkdir('deleted_pads', function(err) {});
 
@@ -57,23 +75,26 @@ if (loop) {
 function delete_old_pads() {
     // Deletion queue (avoids max stack size error), 2 workers
     var q = async.queue(function (pad, callback) {
-        API.getHTML(pad.id, function(err, d) {
+        getHTML(pad.id, undefined, function(err, d) {
             if (err) {
                 return callback(err);
             }
             var currentTime = (new Date).getTime();
             fs.writeFile('deleted_pads/'+pad.id+'-'+currentTime+'.html', d.html, function(err) {
-                pad.remove(callback);
+                var remove = getRemoveFun(pad)
+                remove(callback);
             });
         });
     }, 2);
     // Emptyness test queue
     var p = async.queue(function(padId, callback) {
-        padManager.getPad(padId, function(err, pad) {
+        getPad(padId, null, function(err, pad) {
             // If this is a new pad, there's nothing to do
             var head = pad.getHeadRevisionNumber();
             if (head !== null  && head !== undefined && head !== 0) {
-                pad.getLastEdit(function(callback, timestamp) {
+              var getLastEdit = getLastEditFun(pad)
+
+              getLastEdit(function(callback, timestamp) {
                     if (timestamp !== undefined && timestamp !== null) {
                         var currentTime = (new Date).getTime();
                         // Are we over delay?
@@ -83,7 +104,7 @@ function delete_old_pads() {
                             q.push(pad, function (err) {
                                 console.info('Pad '+pad.id+' deleted since expired (delay: '+delay+' seconds, last edition: '+timestamp+').');
                                 // Create new pad with an explanation
-                                padManager.getPad(padId, replaceText, function() {
+                                getPad(padId, replaceText, function() {
                                     // Create disconnect message
                                     var msg = {
                                         type: "COLLABROOM",
@@ -117,7 +138,7 @@ function delete_old_pads() {
             callback();
         });
     }, 1);
-    padManager.listAllPads(function (err, data) {
+    listAllPads(function (err, data) {
         for (var i = 0; i < data.padIDs.length; i++) {
             var padId = data.padIDs[i];
             console.debug('Pushing %s to p queue', padId);
@@ -133,19 +154,20 @@ exports.handleMessage = function(hook_name, context, cb) {
            type = message.type;
     if (type === 'CLIENT_READY' || type === 'COLLABROOM') {
         var padId = (type === 'CLIENT_READY') ? message.padId : context.client.rooms[1];
-        padManager.getPad(padId, function(callback, pad) {
+        getPad(padId, null, function(callback, pad) {
 
             // If this is a new pad, there's nothing to do
             if (pad.getHeadRevisionNumber() !== 0) {
+                var getLastEdit = getLastEditFun(pad)
 
-                pad.getLastEdit(function(callback, timestamp) {
+                getLastEdit(function(callback, timestamp) {
                     if (timestamp !== undefined && timestamp !== null) {
                         var currentTime = (new Date).getTime();
 
                         // Are we over delay?
                         if ((currentTime - timestamp) > (delay * 1000)) {
 
-                            API.getHTML(padId, function(err, d) {
+                            getHTML(padId, undefined, function(err, d) {
                                 if (err) {
                                     return cb(err);
                                 }
@@ -154,11 +176,11 @@ exports.handleMessage = function(hook_name, context, cb) {
                                         return cb(err);
                                     }
                                     // Remove pad
-                                    padManager.removePad(padId);
+                                    removePad(padId);
                                     console.info('Pad '+padId+' deleted since expired (delay: '+delay+' seconds, last edition: '+timestamp+').');
 
                                     // Create new pad with an explanation
-                                    padManager.getPad(padId, replaceText, function() {
+                                    getPad(padId, replaceText, function() {
                                         // Create disconnect message
                                         var msg = {
                                             type: "COLLABROOM",
@@ -210,12 +232,13 @@ exports.registerRoute  = function (hook_name, args, cb) {
         res.header("Access-Control-Allow-Origin", "*");
         res.setHeader('Content-Type', 'application/json');
 
-        padManager.getPad(padId, function(callback, pad) {
+        getPad(padId, null, function(callback, pad) {
 
             // If this is a new pad, there's nothing to do
             if (pad.getHeadRevisionNumber() !== 0) {
+              var getLastEdit = getLastEditFun(pad)
 
-                pad.getLastEdit(function(callback, timestamp) {
+              getLastEdit(function(callback, timestamp) {
                     if (timestamp !== undefined && timestamp !== null) {
                         var currentTime = (new Date).getTime();
 
@@ -229,4 +252,47 @@ exports.registerRoute  = function (hook_name, args, cb) {
             cb && cb();
         });
     });
+}
+
+function wrapPromise (p, cb) {
+  return p.then(function (result) { cb(null, result); })
+    .catch(function(err) { cb(err); });
+}
+
+function callbackify0 (fun) {
+  return function (cb) {
+    return wrapPromise(fun(), cb);
+  };
+};
+
+function callbackify1 (fun) {
+  return function (arg1, cb) {
+    return wrapPromise(fun(arg1), cb);
+  };
+};
+
+function callbackify2 (fun) {
+  return function (arg1, arg2, cb) {
+    return wrapPromise(fun(arg1, arg2), cb);
+  };
+};
+
+function getLastEditFun (pad) {
+  var fun = pad.getLastEdit.bind(pad)
+
+  if (usePromises) {
+    return callbackify0(fun)
+  }
+
+  return fun
+}
+
+function getRemoveFun (pad) {
+  var fun = pad.remove.bind(pad)
+
+  if (usePromises) {
+    return callbackify0(fun)
+  }
+
+  return fun
 }

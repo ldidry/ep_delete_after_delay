@@ -26,11 +26,6 @@ if (usePromises) {
 
 fs.mkdir('deleted_pads', function(err) {});
 
-// Add client code
-exports.eejsBlock_scripts = function (hook_name, args, cb) {
-    args.content = '<script src="../static/plugins/ep_delete_after_delay/static/js/reconnect.js"></script>' + args.content;
-}
-
 // Get settings
 var areParamsOk = (settings.ep_delete_after_delay) ? true : false,
     delay, replaceText, loopDelay, deleteAtStart;

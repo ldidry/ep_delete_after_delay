@@ -4,7 +4,6 @@
             "name": "ep_delete_after_delay",
             "hooks": {
                 "handleMessage" : "ep_delete_after_delay/delete",
-                "eejsBlock_scripts": "ep_delete_after_delay/delete",
                 "expressCreateServer" : "ep_delete_after_delay/delete:registerRoute"
             },
             "client_hooks": {

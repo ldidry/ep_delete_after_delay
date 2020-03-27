@@ -1,9 +1,3 @@
-/*
- * Commented because it fix https://github.com/ldidry/ep_delete_after_delay/issues/1
- * if(typeof exports == 'undefined'){
-    var exports = this['mymodule'] = {};
-}*/
-
 var already_notified = false;
 var delay;
 

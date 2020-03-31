@@ -153,7 +153,10 @@ exports.handleMessage = function(hook_name, context, cb) {
     var message = context.message,
            type = message.type;
     if (type === 'CLIENT_READY' || type === 'COLLABROOM') {
-        var padId = (type === 'CLIENT_READY') ? message.padId : context.client.rooms[1];
+        var padId = (type === 'CLIENT_READY')
+          ? message.padId :
+          Object.keys(context.client.rooms)[1];
+
         getPad(padId, null, function(callback, pad) {
 
             // If this is a new pad, there's nothing to do

@@ -1,10 +1,10 @@
 {
     "ep_delete_after_delay.warning": "× WARNING!",
-    "ep_delete_after_delay.reload": "The pad has expired. The page will be reloaded in 5 seconds.",
+    "ep_delete_after_delay.reload": "This pad has expired. The page will be reloaded in 5 seconds.",
     "ep_delete_after_delay.close": "× Delay before deletion",
-    "ep_delete_after_delay.days": "Without edition, your pad will be deleted in approximatively XXXX days.",
-    "ep_delete_after_delay.hours": "Without edition, your pad will be deleted in approximatively XXXX hours.",
-    "ep_delete_after_delay.minutes": "Without edition, your pad will be deleted in approximatively XXXX minutes.",
-    "ep_delete_after_delay.suggest": "I suggest you to either edit your pad or export it to save your work.",
+    "ep_delete_after_delay.days": "Your pad will be deleted if it is not edited in about XXXX days.",
+    "ep_delete_after_delay.hours": "Your pad will be deleted if it is not edited in about XXXX hours.",
+    "ep_delete_after_delay.minutes": "Your pad will be deleted if it is not edited in about XXXX minutes.",
+    "ep_delete_after_delay.suggest": "Please edit or export your pad if you need to save your work.",
     "ep_delete_after_delay.close_notification": "Close notification"
 }

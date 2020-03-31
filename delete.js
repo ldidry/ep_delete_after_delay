@@ -75,7 +75,20 @@ function delete_old_pads() {
                 return callback(err);
             }
             var currentTime = (new Date).getTime();
-            fs.writeFile('deleted_pads/'+pad.id+'-'+currentTime+'.html', d.html, function(err) {
+            var a = pad.id.substr(0,1);
+            fs.mkdir('deleted_pads/'+a, function(err) {});
+            var path = 'deleted_pads/'+a+'/'+pad.id+'-'+currentTime+'.html';
+            if (pad.id.length > 1) {
+                var b = pad.id.substr(1,1);
+                fs.mkdir('deleted_pads/'+a+'/'+b, function(err) {});
+                path = 'deleted_pads/'+a+'/'+b+'/'+pad.id+'-'+currentTime+'.html';
+                if (pad.id.length > 2) {
+                    var c = pad.id.substr(2,1);
+                    fs.mkdir('deleted_pads/'+a+'/'+b+'/'+c, function(err) {});
+                    path = 'deleted_pads/'+a+'/'+b+'/'+c+'/'+pad.id+'-'+currentTime+'.html';
+                }
+            }
+            fs.writeFile(path, d.html, function(err) {
                 var remove = getRemoveFun(pad)
                 remove(callback);
             });

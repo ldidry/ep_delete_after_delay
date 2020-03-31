@@ -11,10 +11,10 @@
     "peerDependencies": {},
     "repository": {
         "type": "git",
-        "url": "https://framagit.org/luc/ep_delete_after_delay.git"
+        "url": "https://framagit.org/fiat-tux/etherpad/ep_delete_after_delay.git"
     },
     "bugs": {
-        "url": "https://framagit.org/luc/ep_delete_after_delay/issues"
+        "url": "https://framagit.org/fiat-tux/etherpad/ep_delete_after_delay/issues"
     },
     "license": "Apache-2.0"
 }

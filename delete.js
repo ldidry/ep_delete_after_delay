@@ -213,7 +213,7 @@ exports.handleMessage = function(hook_name, context, cb) {
                                 });
                             });
                         } else {
-                            console.info('Nothing to do with '+padId+' (not expired)');
+                            console.debug('Nothing to do with '+padId+' (not expired)');
                             cb();
                         }
                     }

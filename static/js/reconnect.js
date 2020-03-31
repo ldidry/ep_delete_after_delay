@@ -31,8 +31,11 @@ function get_ttl(callback) {
                 $.gritter.add({
                     class_name: 'ttl',
                     title: window._('ep_delete_after_delay.close'),
-                    text: text+'<br>'+window._('ep_delete_after_delay.suggest'),
+                    text: text+'<br>'+window._('ep_delete_after_delay.suggest')+'<br><button id="close_expiration_notif">'+window._('ep_delete_after_delay.close_notification')+'</button>',
                     sticky: true,
+                });
+                $('#close_expiration_notif').click(function() {
+                    $(this).parents('.gritter-item').find('.gritter-close').click();
                 });
             }
         },

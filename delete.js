@@ -155,6 +155,11 @@ function delete_old_pads() {
     });
 }
 
+// Add CSS
+exports.eejsBlock_styles = function (hook, context) {
+    context.content = context.content + '<link rel="stylesheet" type="text/css" href="../static/plugins/ep_delete_after_delay/static/css/reconnect.css"></link>';
+}
+
 exports.handleMessage = function(hook_name, context, cb) {
     if (areParamsOk === false) return false;
 

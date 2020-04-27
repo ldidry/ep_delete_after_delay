@@ -30,6 +30,7 @@ function get_ttl(callback) {
                 text = text.replace(/XXXX/, ttl);
                 $.gritter.add({
                     class_name: 'ttl',
+                    position: 'bottom',
                     title: window._('ep_delete_after_delay.close'),
                     text: text+'<br>'+window._('ep_delete_after_delay.suggest')+'<br><button id="close_expiration_notif">'+window._('ep_delete_after_delay.close_notification')+'</button>',
                     sticky: true,
@@ -56,6 +57,7 @@ exports.handleClientMessage_CUSTOM = function(hook, context, wut){
         already_notified = true;
         $.gritter.add({
             title: window._('ep_delete_after_delay.warning'),
+            position: 'bottom',
             text: window._('ep_delete_after_delay.reload'),
             sticky: true,
         });

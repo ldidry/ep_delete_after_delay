@@ -1,7 +1,7 @@
 {
-    "ep_delete_after_delay.warning": "× WARNING!",
+    "ep_delete_after_delay.warning": "WARNING!",
     "ep_delete_after_delay.reload": "This pad has expired. The page will be reloaded in 5 seconds.",
-    "ep_delete_after_delay.close": "× Delay before deletion",
+    "ep_delete_after_delay.close": "Delay before deletion",
     "ep_delete_after_delay.days": "Your pad will be deleted if it is not edited in about XXXX days.",
     "ep_delete_after_delay.hours": "Your pad will be deleted if it is not edited in about XXXX hours.",
     "ep_delete_after_delay.minutes": "Your pad will be deleted if it is not edited in about XXXX minutes.",

@@ -1,6 +1,6 @@
 {
     "name": "ep_delete_after_delay",
-    "version": "0.0.18",
+    "version": "0.0.19",
     "description": "Automatically deletes pads after a configured delay",
     "author": {
         "name": "Luc Didry",

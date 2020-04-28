@@ -1,7 +1,7 @@
 {
-    "ep_delete_after_delay.warning": "× WARNUNG!",
+    "ep_delete_after_delay.warning": "WARNUNG!",
     "ep_delete_after_delay.reload": "Dieses PAD ist verfallen. Die Seite wird in 5 Sekunden neu geladen.",
-    "ep_delete_after_delay.close": "× Verzögerung vor Löschung",
+    "ep_delete_after_delay.close": "Verzögerung vor Löschung",
     "ep_delete_after_delay.days": "Dein PAD wird gelöscht wenn es nicht innerhalb etwa XXXX Tagen bearbeitet wird.",
     "ep_delete_after_delay.hours": "Dein PAD wird gelöscht wenn es nicht innerhalb etwa XXXX Stunden bearbeitet wird.",
     "ep_delete_after_delay.minutes": "Dein PAD wird gelöscht wenn es nicht innerhalb etwa XXXX Minuten bearbeitet wird.",

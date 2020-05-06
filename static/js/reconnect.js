@@ -28,10 +28,15 @@ function get_ttl(callback) {
                 }
                 ttl  = Math.floor(ttl * 10)/10;
                 text = text.replace(/XXXX/, ttl);
+                var msg = text+'<br>'+window._('ep_delete_after_delay.suggest');
+                // before etherpad 1.8.3, gritter messages was not so easy to close, so we used to add a custom close button
+                if (!$('#editorcontainerbox').hasClass('flex-layout')) {
+                    msg += '<br><button id="close_expiration_notif">'+window._('ep_delete_after_delay.close_notification')+'</button>';
+                }
                 $.gritter.add({
                     class_name: 'ttl',
                     title: window._('ep_delete_after_delay.close'),
-                    text: text+'<br>'+window._('ep_delete_after_delay.suggest')+'<br><button id="close_expiration_notif">'+window._('ep_delete_after_delay.close_notification')+'</button>',
+                    text: msg,
                     sticky: true,
                     position: 'bottom'
                 });

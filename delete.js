@@ -24,7 +24,9 @@ if (usePromises) {
 }
 
 
-fs.mkdir('deleted_pads', function(err) {});
+if (!fs.existsSync('deleted_pads')) {
+    fs.mkdirSync('deleted_pads');
+}
 
 // Get settings
 var areParamsOk = (settings.ep_delete_after_delay) ? true : false,
@@ -76,15 +78,21 @@ function delete_old_pads() {
             }
             var currentTime = (new Date).getTime();
             var a = pad.id.substr(0,1);
-            fs.mkdir('deleted_pads/'+a, function(err) {});
+            if (!fs.existsSync('deleted_pads/'+a)) {
+                fs.mkdirSync('deleted_pads/'+a, { recursive: true });
+            }
             var path = 'deleted_pads/'+a+'/'+pad.id+'-'+currentTime+'.html';
             if (pad.id.length > 1) {
                 var b = pad.id.substr(1,1);
-                fs.mkdir('deleted_pads/'+a+'/'+b, function(err) {});
+                if (!fs.existsSync('deleted_pads/'+a+'/'+b)) {
+                    fs.mkdirSync('deleted_pads/'+a+'/'+b, { recursive: true });
+                }
                 path = 'deleted_pads/'+a+'/'+b+'/'+pad.id+'-'+currentTime+'.html';
                 if (pad.id.length > 2) {
                     var c = pad.id.substr(2,1);
-                    fs.mkdir('deleted_pads/'+a+'/'+b+'/'+c, function(err) {});
+                    if (!fs.existsSync('deleted_pads/'+a+'/'+b+'/'+c)) {
+                        fs.mkdirSync('deleted_pads/'+a+'/'+b+'/'+c, { recursive: true });
+                    }
                     path = 'deleted_pads/'+a+'/'+b+'/'+c+'/'+pad.id+'-'+currentTime+'.html';
                 }
             }

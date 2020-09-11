@@ -2,9 +2,9 @@
     "ep_delete_after_delay.warning": "WARNUNG!",
     "ep_delete_after_delay.reload": "Dieses Pad ist abgelaufen. Die Seite wird in 5 Sekunden neu geladen.",
     "ep_delete_after_delay.close": "Wartezeit vor Löschung",
-    "ep_delete_after_delay.days": "Ihr Pad wird gelöscht, wenn es in ca. XXXX Tagen nicht bearbeitet wird.",
-    "ep_delete_after_delay.hours": "Ihr Pad wird gelöscht, wenn es in ca. XXXX Stunden nicht bearbeitet wird.",
-    "ep_delete_after_delay.minutes": "Ihr Pad wird gelöscht, wenn es in ca. XXXX Minuten nicht bearbeitet wird.",
-    "ep_delete_after_delay.suggest": "Bitte bearbeiten oder exportieren Sie Ihr Pad, wenn Sie Ihre Arbeit speichern müssen.",
+    "ep_delete_after_delay.days": "Dieses Pad wird gelöscht, wenn es in ca. XXXX Tagen nicht bearbeitet wird.",
+    "ep_delete_after_delay.hours": "Dieses Pad wird gelöscht, wenn es in ca. XXXX Stunden nicht bearbeitet wird.",
+    "ep_delete_after_delay.minutes": "Dieses Pad wird gelöscht, wenn es in ca. XXXX Minuten nicht bearbeitet wird.",
+    "ep_delete_after_delay.suggest": "Um die Arbeit zu speichern, muss das Pad bearbeitet oder exportiert werden.",
     "ep_delete_after_delay.close_notification": "Benachrichtigung schließen"
 }

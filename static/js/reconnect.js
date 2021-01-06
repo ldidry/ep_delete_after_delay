@@ -52,21 +52,6 @@ function timeout_ttl(delay) {
     }, delay);
 }
 
-exports.handleClientMessage_CUSTOM = function(hook, context, wut){
-    if(already_notified === false && context.payload && context.payload.action === 'requestRECONNECT'){
-        already_notified = true;
-        $.gritter.add({
-            title: window._('ep_delete_after_delay.warning'),
-            text: window._('ep_delete_after_delay.reload'),
-            sticky: true,
-            position: 'bottom'
-        });
-        setTimeout(function() {
-            window.location.reload();
-        }, 6000);
-    }
-}
-
 exports.documentReady = function() {
     setTimeout(function() {
         get_ttl(timeout_ttl);

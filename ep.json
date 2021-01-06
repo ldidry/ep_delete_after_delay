@@ -8,7 +8,6 @@
                 "eejsBlock_styles": "ep_delete_after_delay/delete"
             },
             "client_hooks": {
-                "handleClientMessage_CUSTOM":"ep_delete_after_delay/static/js/reconnect",
                 "documentReady": "ep_delete_after_delay/static/js/reconnect"
             }
         }

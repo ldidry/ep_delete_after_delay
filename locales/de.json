@@ -5,6 +5,5 @@
     "ep_delete_after_delay.days": "Ihr Pad wird gelöscht, wenn es in ca. XXXX Tagen nicht bearbeitet wird.",
     "ep_delete_after_delay.hours": "Ihr Pad wird gelöscht, wenn es in ca. XXXX Stunden nicht bearbeitet wird.",
     "ep_delete_after_delay.minutes": "Ihr Pad wird gelöscht, wenn es in ca. XXXX Minuten nicht bearbeitet wird.",
-    "ep_delete_after_delay.suggest": "Bitte bearbeiten oder exportieren Sie Ihr Pad, wenn Sie Ihre Arbeit speichern müssen.",
-    "ep_delete_after_delay.close_notification": "Benachrichtigung schließen"
+    "ep_delete_after_delay.suggest": "Bitte bearbeiten oder exportieren Sie Ihr Pad, wenn Sie Ihre Arbeit speichern müssen."
 }

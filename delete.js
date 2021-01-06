@@ -164,8 +164,9 @@ function delete_old_pads() {
 }
 
 // Add CSS
-exports.eejsBlock_styles = function (hook, context) {
+exports.eejsBlock_styles = function (hook, context, cb) {
     context.content = context.content + '<link rel="stylesheet" type="text/css" href="../static/plugins/ep_delete_after_delay/static/css/reconnect.css"></link>';
+    return cb();
 }
 
 exports.handleMessage = function(hook_name, context, cb) {
@@ -273,9 +274,9 @@ exports.registerRoute  = function (hook_name, args, cb) {
             } else {
                 res.send('{"ttl": null, "msg": "New or empty pad"}');
             }
-            cb && cb();
         });
     });
+    cb && cb();
 }
 
 function wrapPromise (p, cb) {

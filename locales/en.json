@@ -5,6 +5,5 @@
     "ep_delete_after_delay.days": "Your pad will be deleted if it is not edited in about XXXX days.",
     "ep_delete_after_delay.hours": "Your pad will be deleted if it is not edited in about XXXX hours.",
     "ep_delete_after_delay.minutes": "Your pad will be deleted if it is not edited in about XXXX minutes.",
-    "ep_delete_after_delay.suggest": "Please edit or export your pad if you need to save your work.",
-    "ep_delete_after_delay.close_notification": "Close notification"
+    "ep_delete_after_delay.suggest": "Please edit or export your pad if you need to save your work."
 }

@@ -5,6 +5,9 @@ var API             = require('ep_etherpad-lite/node/db/API'),
   async             = require('ep_etherpad-lite/node_modules/async'),
   fs                = require('fs');
 
+const log4js = require('ep_etherpad-lite/node_modules/log4js');
+const logger = log4js.getLogger('ep_delete_after_delay');
+
 var epVersion = parseFloat(require('ep_etherpad-lite/package.json').version);
 var usePromises = epVersion >= 1.8
 var getHTML, getPad, listAllPads
@@ -39,20 +42,20 @@ if (areParamsOk) {
     replaceText   = settings.ep_delete_after_delay.text || "The content of this pad has been deleted since it was older than the configured delay.";
     areParamsOk   = (typeof delay === 'number' && delay > 0) ? true : false;
     if (areParamsOk === false) {
-        console.error('ep_delete_after_delay.delay must be a number an not negative! Check you settings.json.');
+        logger.error('ep_delete_after_delay.delay must be a number an not negative! Check you settings.json.');
     }
     areParamsOk = (typeof loopDelay === 'number' && loopDelay > 0) ? true : false;
     if (areParamsOk === false) {
-        console.error('ep_delete_after_delay.loopDelay must be a number an not negative! Check you settings.json.');
+        logger.error('ep_delete_after_delay.loopDelay must be a number an not negative! Check you settings.json.');
     }
 } else {
-    console.error('You need to configure ep_delete_after_delay in your settings.json!');
+    logger.error('You need to configure ep_delete_after_delay in your settings.json!');
 }
 
 // Recurring deletion function
 var waitForIt = function() {
     setTimeout(function() {
-        console.info('New loop');
+        logger.info('New loop');
         delete_old_pads();
         waitForIt();
     }, loopDelay * 1000);
@@ -115,10 +118,10 @@ function delete_old_pads() {
                         var currentTime = (new Date).getTime();
                         // Are we over delay?
                         if ((currentTime - timestamp) > (delay * 1000)) {
-                            console.debug('Pushing %s to q queue', pad.id);
+                            logger.debug('Pushing %s to q queue', pad.id);
                             // Remove pad
                             q.push(pad, function (err) {
-                                console.info('Pad '+pad.id+' deleted since expired (delay: '+delay+' seconds, last edition: '+timestamp+').');
+                                logger.info('Pad '+pad.id+' deleted since expired (delay: '+delay+' seconds, last edition: '+timestamp+').');
                                 // Create new pad with an explanation
                                 getPad(padId, replaceText, function() {
                                     // Create disconnect message
@@ -144,12 +147,12 @@ function delete_old_pads() {
                                 });
                             });
                         } else {
-                            console.debug('Nothing to do with '+padId+' (not expired)');
+                            logger.debug('Nothing to do with '+padId+' (not expired)');
                         }
                     }
                 });
             } else {
-                console.debug('New or empty pad '+padId);
+                logger.debug('New or empty pad '+padId);
             }
             callback();
         });
@@ -157,7 +160,7 @@ function delete_old_pads() {
     listAllPads(function (err, data) {
         for (var i = 0; i < data.padIDs.length; i++) {
             var padId = data.padIDs[i];
-            console.debug('Pushing %s to p queue', padId);
+            logger.debug('Pushing %s to p queue', padId);
             p.push(padId, function (err) { });
         }
     });
@@ -202,7 +205,7 @@ exports.handleMessage = function(hook_name, context, cb) {
                                     }
                                     // Remove pad
                                     removePad(padId);
-                                    console.info('Pad '+padId+' deleted since expired (delay: '+delay+' seconds, last edition: '+timestamp+').');
+                                    logger.info('Pad '+padId+' deleted since expired (delay: '+delay+' seconds, last edition: '+timestamp+').');
 
                                     // Create new pad with an explanation
                                     getPad(padId, replaceText, function() {
@@ -235,13 +238,13 @@ exports.handleMessage = function(hook_name, context, cb) {
                                 });
                             });
                         } else {
-                            console.debug('Nothing to do with '+padId+' (not expired)');
+                            logger.debug('Nothing to do with '+padId+' (not expired)');
                             cb();
                         }
                     }
                 });
             } else {
-                console.info('New or empty pad '+padId);
+                logger.info('New or empty pad '+padId);
                 cb()
             }
         });

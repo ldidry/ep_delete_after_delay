@@ -172,15 +172,14 @@ exports.eejsBlock_styles = function (hook, context, cb) {
     return cb();
 }
 
-exports.handleMessage = function(hook_name, context, cb) {
+exports.handleMessage = function(hook_name, {message, socket}, cb) {
     if (areParamsOk === false) return false;
 
-    var message = context.message,
-           type = message.type;
+    var type = message.type;
     if (type === 'CLIENT_READY' || type === 'COLLABROOM') {
         var padId = (type === 'CLIENT_READY')
           ? message.padId :
-          Object.keys(context.client.rooms)[1];
+          Object.keys(socket.rooms)[1];
 
         getPad(padId, null, function(callback, pad) {
 

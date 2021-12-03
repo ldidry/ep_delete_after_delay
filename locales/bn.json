@@ -1,9 +1,9 @@
 {
-    "ep_delete_after_delay.warning": "",
-    "ep_delete_after_delay.reload": "",
-    "ep_delete_after_delay.close": "",
-    "ep_delete_after_delay.days": "",
-    "ep_delete_after_delay.hours": "",
-    "ep_delete_after_delay.minutes": "",
-    "ep_delete_after_delay.suggest": ""
+    "ep_delete_after_delay.warning": "সতর্কতা!",
+    "ep_delete_after_delay.reload": "এই প্যাড মেয়াদোত্তীর্ণ। পৃষ্ঠা ৫ সেকেন্ডে পুনঃপ্রক্রিয়া হবে।",
+    "ep_delete_after_delay.close": "মুছে ফেলার আগে সময় বাকি",
+    "ep_delete_after_delay.days": "XXXX দিনে প্যাড সম্পাদনা না করলে, তা মুছে যাবে।",
+    "ep_delete_after_delay.hours": "XXXX ঘণ্টায় প্যাড সম্পাদনা না করলে, তা মুছে যাবে।",
+    "ep_delete_after_delay.minutes": "XXXX মিনিটে প্যাড সম্পাদনা না করলে, তা মুছে যাবে।",
+    "ep_delete_after_delay.suggest": "তোমার লেখা সংরক্ষণ করতে অনুগ্রহ করে সম্পাদনা করো বা প্যাড রপ্তানি বা বের করে নাও।"
 }

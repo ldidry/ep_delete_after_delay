@@ -3,7 +3,7 @@ var delay;
 
 function get_ttl(callback) {
     $.ajax({
-        url: '../ttl/'+window.location.pathname.replace(/.*\/p\//, ''),
+        url: '../ttl/' + window.pad.getPadId(),
         method: 'GET',
         dataType: 'json',
         success: function(data, textStatus, jqXHR) {

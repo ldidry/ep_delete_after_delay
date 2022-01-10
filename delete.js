@@ -10,7 +10,8 @@ const logger = log4js.getLogger('ep_delete_after_delay');
 
 var epVersion = parseFloat(require('ep_etherpad-lite/package.json').version);
 var usePromises = epVersion >= 1.8
-var getHTML, getPad, listAllPads
+var getHTML, getPad, listAllPads, doesPadExist;
+
 
 var removePad = padManager.removePad
 
@@ -19,11 +20,13 @@ if (usePromises) {
 
   getPad = callbackify2(padManager.getPad)
   listAllPads = callbackify0(padManager.listAllPads)
+  doesPadExist = callbackify1(padManager.doesPadExist);
 } else {
   getHTML = API.getHTML
 
   getPad = padManager.getPad
   listAllPads = padManager.listAllPads
+  doesPadExist = padManager.doesPadExist;
 }
 
 
@@ -259,23 +262,30 @@ exports.registerRoute  = function (hook_name, args, cb) {
         res.header("Access-Control-Allow-Origin", "*");
         res.setHeader('Content-Type', 'application/json');
 
-        getPad(padId, null, function(callback, pad) {
+        doesPadExist(padId, function(callback, doesExist) {
+            if (doesExist === false) {
+                res.send('{"ttl": null, "msg": "Empty pad"}');
+            } else {
+                getPad(padId, null, function(callback, pad) {
 
-            // If this is a new pad, there's nothing to do
-            if (pad.getHeadRevisionNumber() !== 0) {
-              var getLastEdit = getLastEditFun(pad)
+                    // If this is a new pad, there's nothing to do
+                    if (pad.getHeadRevisionNumber() !== 0) {
+                      var getLastEdit = getLastEditFun(pad)
 
-              getLastEdit(function(callback, timestamp) {
-                    if (timestamp !== undefined && timestamp !== null) {
-                        var currentTime = (new Date).getTime();
+                      getLastEdit(function(callback, timestamp) {
+                            if (timestamp !== undefined && timestamp !== null) {
+                                var currentTime = (new Date).getTime();
 
-                        var ttl = Math.floor((delay * 1000 - (currentTime - timestamp))/1000);
-                        res.send('{"ttl": '+ttl+'}');
+                                var ttl = Math.floor((delay * 1000 - (currentTime - timestamp))/1000);
+                                res.send('{"ttl": '+ttl+'}');
+                            }
+                        });
+                    } else {
+                        res.send('{"ttl": null, "msg": "New or empty pad"}');
                     }
                 });
-            } else {
-                res.send('{"ttl": null, "msg": "New or empty pad"}');
             }
+
         });
     });
     cb && cb();

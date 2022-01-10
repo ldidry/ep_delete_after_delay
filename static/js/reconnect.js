@@ -15,14 +15,23 @@ function get_ttl(callback) {
                 var text, ttl;
                 if (data.ttl > 3600 * 24) {
                     text  = window._('ep_delete_after_delay.days');
+                    if (typeof(text) === 'undefined') {
+                        text  = 'Your pad will be deleted if it is not edited in about XXXX days.';
+                    }
                     ttl   = data.ttl/(3600 * 24);
                     delay = 3500 * 1000;
                 } else if (data.ttl > 3600) {
                     text  = window._('ep_delete_after_delay.hours');
+                    if (typeof(text) === 'undefined') {
+                        text  = 'Your pad will be deleted if it is not edited in about XXXX hours.'
+                    }
                     ttl   = data.ttl/3600;
                     delay = 1800 * 1000; // 30 minutes
                 } else {
                     text  = window._('ep_delete_after_delay.minutes');
+                    if (typeof(text) === 'undefined') {
+                        text  = 'Your pad will be deleted if it is not edited in about XXXX minutes.';
+                    }
                     ttl   = data.ttl/60;
                     delay = 600 * 1000 // 10 minutes
                 }

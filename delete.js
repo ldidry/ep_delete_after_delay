@@ -181,7 +181,7 @@ exports.handleMessage = function(hook_name, {message, socket}, cb) {
     var type = message.type;
     if (type === 'CLIENT_READY' || type === 'COLLABROOM') {
         var padId = (type === 'CLIENT_READY')
-          ? message.padId :
+          ? padMessageHandler.sessioninfos[socket.id].padId :
           Object.keys(socket.rooms)[1];
 
         getPad(padId, null, function(callback, pad) {

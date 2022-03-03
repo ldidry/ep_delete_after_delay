@@ -8,7 +8,9 @@
         "url": "https://fiat-tux.fr"
     },
     "dependencies": {},
-    "peerDependencies": {},
+    "peerDependencies": {
+        "ep_etherpad-lite": ">=1.8.17"
+    },
     "repository": {
         "type": "git",
         "url": "https://framagit.org/fiat-tux/etherpad/ep_delete_after_delay.git"

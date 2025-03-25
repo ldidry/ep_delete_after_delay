@@ -1,0 +1,9 @@
+{
+    "ep_delete_after_delay.warning": "¡Precaución!",
+    "ep_delete_after_delay.reload": "Este pad ha expirado. La página será recargada en 5 segundos.",
+    "ep_delete_after_delay.close": "Plazo antes de la eliminación",
+    "ep_delete_after_delay.days": "Su pad será eliminado sino es editado en XXXX días.",
+    "ep_delete_after_delay.hours": "Su pad será eliminado sino es editado en XXXX horas.",
+    "ep_delete_after_delay.minutes": "Su pad será eliminado sino es editado en XXXX minutos.",
+    "ep_delete_after_delay.suggest": "Por favor, edite o exporte su pad si necesita guardar su trabajo."
+}

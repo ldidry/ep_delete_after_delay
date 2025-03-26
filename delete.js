@@ -84,22 +84,22 @@ function delete_old_pads() {
             }
             var currentTime = (new Date).getTime();
             var a = pad.id.substr(0,1);
-            if (!fs.existsSync('deleted_pads/'+a)) {
-                fs.mkdirSync('deleted_pads/'+a, { recursive: true });
+            if (!fs.existsSync(`deleted_pads/${a}`)) {
+                fs.mkdirSync(`deleted_pads/${a}`, { recursive: true });
             }
-            var path = 'deleted_pads/'+a+'/'+pad.id+'-'+currentTime+'.html';
+            var path = `deleted_pads/${a}/${pad.id}-${currentTime}.html`;
             if (pad.id.length > 1) {
                 var b = pad.id.substr(1,1);
-                if (!fs.existsSync('deleted_pads/'+a+'/'+b)) {
-                    fs.mkdirSync('deleted_pads/'+a+'/'+b, { recursive: true });
+                if (!fs.existsSync(`deleted_pads/${a}/${b}`)) {
+                    fs.mkdirSync(`deleted_pads/${a}/${b}`, { recursive: true });
                 }
-                path = 'deleted_pads/'+a+'/'+b+'/'+pad.id+'-'+currentTime+'.html';
+                path = `deleted_pads/${a}/${b}/${pad.id}-${currentTime}.html`;
                 if (pad.id.length > 2) {
                     var c = pad.id.substr(2,1);
-                    if (!fs.existsSync('deleted_pads/'+a+'/'+b+'/'+c)) {
-                        fs.mkdirSync('deleted_pads/'+a+'/'+b+'/'+c, { recursive: true });
+                    if (!fs.existsSync(`deleted_pads/${a}/${b}/${c}`)) {
+                        fs.mkdirSync(`deleted_pads/${a}/${b}/${c}`, { recursive: true });
                     }
-                    path = 'deleted_pads/'+a+'/'+b+'/'+c+'/'+pad.id+'-'+currentTime+'.html';
+                    path = `deleted_pads/${a}/${b}/${c}/${pad.id}-${currentTime}.html`;
                 }
             }
             fs.writeFile(path, d.html, function(err) {
@@ -121,10 +121,10 @@ function delete_old_pads() {
                         var currentTime = (new Date).getTime();
                         // Are we over delay?
                         if ((currentTime - timestamp) > (delay * 1000)) {
-                            logger.debug('Pushing %s to q queue', pad.id);
+                            logger.debug(`Pushing ${pad.id} to q queue`);
                             // Remove pad
                             q.push(pad, function (err) {
-                                logger.info('Pad '+pad.id+' deleted since expired (delay: '+delay+' seconds, last edition: '+timestamp+').');
+                                logger.info(`Pad ${pad.id} deleted since expired (delay: ${delay} seconds, last edition: ${timestamp}).`);
                                 // Create new pad with an explanation
                                 getPad(padId, replaceText, function() {
                                     // Create disconnect message
@@ -150,12 +150,12 @@ function delete_old_pads() {
                                 });
                             });
                         } else {
-                            logger.debug('Nothing to do with '+padId+' (not expired)');
+                            logger.debug(`Nothing to do with ${padId} (not expired)`);
                         }
                     }
                 });
             } else {
-                logger.debug('New or empty pad '+padId);
+                logger.debug(`New or empty pad ${padId}`);
             }
             callback();
         });
@@ -163,7 +163,7 @@ function delete_old_pads() {
     listAllPads(function (err, data) {
         for (var i = 0; i < data.padIDs.length; i++) {
             var padId = data.padIDs[i];
-            logger.debug('Pushing %s to p queue', padId);
+            logger.debug(`Pushing ${padId} to p queue`);
             p.push(padId, function (err) { });
         }
     });
@@ -171,7 +171,7 @@ function delete_old_pads() {
 
 // Add CSS
 exports.eejsBlock_styles = function (hook, context, cb) {
-    context.content = context.content + '<link rel="stylesheet" type="text/css" href="../static/plugins/ep_delete_after_delay/static/css/reconnect.css"></link>';
+    context.content = `${context.content}<link rel="stylesheet" type="text/css" href="../static/plugins/ep_delete_after_delay/static/css/reconnect.css"></link>`;
     return cb();
 }
 
@@ -201,13 +201,13 @@ exports.handleMessage = function(hook_name, {message, socket}, cb) {
                                 if (err) {
                                     return cb(err);
                                 }
-                                fs.writeFile('deleted_pads/'+padId+'-'+currentTime+'.html', d.html, function(err) {
+                                fs.writeFile(`deleted_pads/${padId}-${currentTime}.html`, d.html, function(err) {
                                     if (err) {
                                         return cb(err);
                                     }
                                     // Remove pad
                                     removePad(padId);
-                                    logger.info('Pad '+padId+' deleted since expired (delay: '+delay+' seconds, last edition: '+timestamp+').');
+                                    logger.info(`Pad ${padId} deleted since expired (delay: ${delay} seconds, last edition: ${timestamp}).`);
 
                                     // Create new pad with an explanation
                                     getPad(padId, replaceText, function() {
@@ -240,13 +240,13 @@ exports.handleMessage = function(hook_name, {message, socket}, cb) {
                                 });
                             });
                         } else {
-                            logger.debug('Nothing to do with '+padId+' (not expired)');
+                            logger.debug(`Nothing to do with ${padId} (not expired)`);
                             cb();
                         }
                     }
                 });
             } else {
-                logger.info('New or empty pad '+padId);
+                logger.info(`New or empty pad ${padId}`);
                 cb()
             }
         });
@@ -277,7 +277,7 @@ exports.registerRoute  = function (hook_name, args, cb) {
                                 var currentTime = (new Date).getTime();
 
                                 var ttl = Math.floor((delay * 1000 - (currentTime - timestamp))/1000);
-                                res.send('{"ttl": '+ttl+'}');
+                                res.send(`{"ttl": ${ttl}}`);
                             }
                         });
                     } else {

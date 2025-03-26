@@ -128,26 +128,7 @@ function delete_old_pads() {
                                 logger.info(`Pad ${pad.id} deleted since expired (delay: ${delay} seconds, last edition: ${timestamp}).`);
                                 // Create new pad with an explanation
                                 getPad(padId, replaceText, function() {
-                                    // Create disconnect message
-                                    var msg = {
-                                        type: "COLLABROOM",
-                                        data: {
-                                            type: "CUSTOM",
-                                            payload: {
-                                                authorId: null,
-                                                action: "requestRECONNECT",
-                                                padId: padId
-                                            }
-                                        }
-                                    };
-                                    // Send disconnect message to all clients
-                                    var sessions = padMessageHandler.sessioninfos;
-                                    Object.keys(sessions).forEach(function(key){
-                                        var session = sessions[key];
-                                        padMessageHandler.handleCustomObjectMessage(msg, false, function(){
-                                            // TODO: Error handling
-                                        }); // Send a message to this session
-                                    });
+                                    logger.debug(`Pad ${padId} recreated with replaceText`);
                                 });
                             });
                         } else {
@@ -186,14 +167,19 @@ exports.handleMessage = function(hook_name, {message, socket}, cb) {
 
     var type = message.type;
     if (type === 'CLIENT_READY' || type === 'COLLABROOM') {
-        var padId = (type === 'CLIENT_READY')
-          ? padMessageHandler.sessioninfos[socket.id].padId :
-          Object.keys(socket.rooms)[1];
+        var padId = padMessageHandler.sessioninfos[socket.id].padId || socket.handshake.query.padId;
+
+        if (typeof(padId) === 'undefined') {
+            return cb();
+        }
 
         getPad(padId, null, function(callback, pad) {
 
             // If this is a new pad, there's nothing to do
-            if (pad.getHeadRevisionNumber() !== 0) {
+            if (pad.getHeadRevisionNumber() === 0) {
+                logger.info(`New or empty pad ${padId}`);
+                cb()
+            } else {
                 var getLastEdit = getLastEditFun(pad)
 
                 getLastEdit(function(callback, timestamp) {
@@ -217,26 +203,7 @@ exports.handleMessage = function(hook_name, {message, socket}, cb) {
 
                                     // Create new pad with an explanation
                                     getPad(padId, replaceText, function() {
-                                        // Create disconnect message
-                                        var msg = {
-                                            type: "COLLABROOM",
-                                            data: {
-                                                type: "CUSTOM",
-                                                payload: {
-                                                    authorId: message.authorId,
-                                                    action: "requestRECONNECT",
-                                                    padId: padId
-                                                }
-                                            }
-                                        };
-                                        // Send disconnect message to all clients
-                                        var sessions = padMessageHandler.sessioninfos;
-                                        Object.keys(sessions).forEach(function(key){
-                                            var session = sessions[key];
-                                            padMessageHandler.handleCustomObjectMessage(msg, false, function(){
-                                                // TODO: Error handling
-                                            }); // Send a message to this session
-                                        });
+                                        logger.debug(`Pad ${padId} recreated with replaceText`);
                                         if (type === 'COLLABROOM') {
                                             cb(null);
                                         } else {
@@ -251,9 +218,6 @@ exports.handleMessage = function(hook_name, {message, socket}, cb) {
                         }
                     }
                 });
-            } else {
-                logger.info(`New or empty pad ${padId}`);
-                cb()
             }
         });
     } else {

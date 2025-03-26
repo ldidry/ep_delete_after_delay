@@ -158,7 +158,16 @@ exports.eejsBlock_styles = function (hook, context, cb) {
 }
 
 exports.shutdown = async (hookName, context) => {
-    waitForItTimeout.unref();
+    if (waitForItTimeout !== null) {
+        waitForItTimeout.unref();
+    }
+}
+
+exports.pluginUninstall = (hook, context, cb) => {
+    if (waitForItTimeout !== null) {
+        clearTimeout(waitForItTimeout)
+    }
+    cb();
 }
 
 exports.handleMessage = function(hook_name, {message, socket}, cb) {

@@ -159,7 +159,6 @@ exports.eejsBlock_styles = function (hook, context, cb) {
 
 exports.shutdown = async (hookName, context) => {
     waitForItTimeout.unref();
-    await flushBuffers();
 }
 
 exports.handleMessage = function(hook_name, {message, socket}, cb) {

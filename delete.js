@@ -56,8 +56,9 @@ if (areParamsOk) {
 }
 
 // Recurring deletion function
+var waitForItTimeout = null;
 var waitForIt = function() {
-    setTimeout(function() {
+    waitForItTimeout = setTimeout(function() {
         logger.info('New loop');
         delete_old_pads();
         waitForIt();
@@ -173,6 +174,11 @@ function delete_old_pads() {
 exports.eejsBlock_styles = function (hook, context, cb) {
     context.content = `${context.content}<link rel="stylesheet" type="text/css" href="../static/plugins/ep_delete_after_delay/static/css/reconnect.css"></link>`;
     return cb();
+}
+
+exports.shutdown = async (hookName, context) => {
+    waitForItTimeout.unref();
+    await flushBuffers();
 }
 
 exports.handleMessage = function(hook_name, {message, socket}, cb) {

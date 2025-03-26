@@ -5,7 +5,8 @@
             "hooks": {
                 "handleMessage" : "ep_delete_after_delay/delete",
                 "expressCreateServer" : "ep_delete_after_delay/delete:registerRoute",
-                "eejsBlock_styles": "ep_delete_after_delay/delete"
+                "eejsBlock_styles": "ep_delete_after_delay/delete",
+                "shutdown" : "ep_delete_after_delay/delete"
             },
             "client_hooks": {
                 "documentReady": "ep_delete_after_delay/static/js/reconnect"

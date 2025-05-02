@@ -180,53 +180,59 @@ exports.handleMessage = function(hook_name, {message, socket}, cb) {
         if (typeof(padId) === 'undefined') {
             return cb();
         }
+        doesPadExist(padId, function(callback, doesExist) {
+            if (doesExist === false) {
+                logger.debug(`Pad ${padId} does not exist.`);
+                return cb();
+            }
 
-        getPad(padId, null, function(callback, pad) {
+            getPad(padId, null, function(callback, pad) {
 
-            // If this is a new pad, there's nothing to do
-            if (pad.getHeadRevisionNumber() === 0) {
-                logger.info(`New or empty pad ${padId}`);
-                cb()
-            } else {
-                var getLastEdit = getLastEditFun(pad)
+                // If this is a new pad, there's nothing to do
+                if (pad.getHeadRevisionNumber() === 0) {
+                    logger.info(`New or empty pad ${padId}`);
+                    cb()
+                } else {
+                    var getLastEdit = getLastEditFun(pad)
 
-                getLastEdit(function(callback, timestamp) {
-                    if (timestamp !== undefined && timestamp !== null) {
-                        var currentTime = (new Date).getTime();
+                    getLastEdit(function(callback, timestamp) {
+                        if (timestamp !== undefined && timestamp !== null) {
+                            var currentTime = (new Date).getTime();
 
-                        // Are we over delay?
-                        if ((currentTime - timestamp) > (delay * 1000)) {
+                            // Are we over delay?
+                            if ((currentTime - timestamp) > (delay * 1000)) {
 
-                            getHTML(padId, undefined, function(err, d) {
-                                if (err) {
-                                    return cb(err);
-                                }
-                                fs.writeFile(`deleted_pads/${padId}-${currentTime}.html`, d.html, function(err) {
+                                getHTML(padId, undefined, function(err, d) {
                                     if (err) {
                                         return cb(err);
                                     }
-                                    // Remove pad
-                                    removePad(padId);
-                                    logger.info(`Pad ${padId} deleted since expired (delay: ${delay} seconds, last edition: ${timestamp}).`);
-
-                                    // Create new pad with an explanation
-                                    getPad(padId, replaceText, function() {
-                                        logger.debug(`Pad ${padId} recreated with replaceText`);
-                                        if (type === 'COLLABROOM') {
-                                            cb(null);
-                                        } else {
-                                            cb();
+                                    fs.writeFile(`deleted_pads/${padId}-${currentTime}.html`, d.html, function(err) {
+                                        if (err) {
+                                            return cb(err);
                                         }
+                                        // Remove pad
+                                        removePad(padId);
+                                        logger.info(`Pad ${padId} deleted since expired (delay: ${delay} seconds, last edition: ${timestamp}).`);
+
+                                        // Create new pad with an explanation
+                                        getPad(padId, replaceText, function() {
+                                            logger.debug(`Pad ${padId} recreated with replaceText`);
+                                            if (type === 'COLLABROOM') {
+                                                cb(null);
+                                            } else {
+                                                cb();
+                                            }
+                                        });
                                     });
                                 });
-                            });
-                        } else {
-                            logger.debug(`Nothing to do with ${padId} (not expired)`);
-                            cb();
+                            } else {
+                                logger.debug(`Nothing to do with ${padId} (not expired)`);
+                                cb();
+                            }
                         }
-                    }
-                });
-            }
+                    });
+                }
+            });
         });
     } else {
         cb();

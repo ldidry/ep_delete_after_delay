@@ -1,11 +1,11 @@
-var API             = require('ep_etherpad-lite/node/db/API'),
-  padManager        = require('ep_etherpad-lite/node/db/PadManager'),
-  padMessageHandler = require('ep_etherpad-lite/node/handler/PadMessageHandler'),
-  settings          = require('ep_etherpad-lite/node/utils/Settings'),
-  async             = require('ep_etherpad-lite/node_modules/async'),
-  fs                = require('fs');
+import API from 'ep_etherpad-lite/node/db/API';
+import padManager from 'ep_etherpad-lite/node/db/PadManager';
+import padMessageHandler from 'ep_etherpad-lite/node/handler/PadMessageHandler';
+import settings from 'ep_etherpad-lite/node/utils/Settings';
+import async from 'ep_etherpad-lite/node_modules/async';
+import log4js from 'ep_etherpad-lite/node_modules/log4js';
+import fs from 'fs';
 
-const log4js = require('ep_etherpad-lite/node_modules/log4js');
 const logger = log4js.getLogger('ep_delete_after_delay');
 
 var epVersion = parseFloat(require('ep_etherpad-lite/package.json').version);

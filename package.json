@@ -9,7 +9,7 @@
     },
     "dependencies": {},
     "peerDependencies": {
-        "ep_etherpad-lite": ">=1.8.17"
+        "ep_etherpad-lite": ">=2.5.0"
     },
     "repository": {
         "type": "git",
